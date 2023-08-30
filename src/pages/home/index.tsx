@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import HomeCarousel from "./home-carousel";
-import ProductFeature from "./product-feature";
+
 import { getAllProduct } from "src/services/product.service";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -36,8 +35,7 @@ function Home() {
   }, []);
   return (
     <div>
-      <HomeCarousel />
-      <ProductFeature />
+Home
     </div>
   );
 }
