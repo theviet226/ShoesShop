@@ -1,8 +1,11 @@
 import React from 'react'
+import HomeCarousel from './home-carousel'
 
 function HomeSkeleton() {
   return (
-    <div>HomeSkeleton</div>
+    <div>
+      <HomeCarousel/>
+    </div>
   )
 }
 

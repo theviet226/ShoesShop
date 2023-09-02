@@ -5,3 +5,11 @@ import { axiosWithoutAuth } from "src/services/config.service";
     console.log(resp)
     return resp.data;
   }
+  export const getProductById = async (id:string|number) =>{
+    try {
+      const resp = await axiosWithoutAuth(`/Product/getbyid?id=${id}`)
+      return resp.data
+    } catch (error) {
+      console.log(error)
+    }
+  }

@@ -2,10 +2,14 @@ import React, { useEffect } from "react";
 
 import { getAllProduct } from "src/services/product.service";
 import { useSelector, useDispatch } from "react-redux";
+import HomeCarousel from "./home-carousel";
+import ProductFeature from "./product-feature";
+import { useAppSelector } from "src/redux/config-store";
+import { setListProduct } from "src/redux/slices/product.slice";
 
 function Home() {
-  const listProduct = useSelector((state: any) => {
-    state.productReducer.listProduct;
+  const listProduct = useAppSelector((state) => {
+    return state.productReducer.listProduct;
   });
   const dispatch = useDispatch();
   // console.log(listProduct)
@@ -26,16 +30,14 @@ function Home() {
     (async () => {
       const resp = await getAllProduct();
       // console.log(resp);
-      const action = {
-        type: "productSlice/setListProduct",
-        payload: resp.content,
-      };
+      const action = setListProduct(resp.content);
       dispatch(action);
     })();
   }, []);
   return (
     <div>
-Home
+      <HomeCarousel />
+      <ProductFeature />
     </div>
   );
 }
