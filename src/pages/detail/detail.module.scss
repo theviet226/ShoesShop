@@ -1,8 +1,9 @@
 .detail-product{
-    padding: 0 40px;
+    padding: 50px 0 40px;
     display: grid;
     grid-template-columns: 1.5fr 2fr;
     font-family: "Inter";
+
     
 }
 .image{
@@ -73,4 +74,11 @@ display: inline;
     color: #FFF8F8;
     margin: 20px 0;
     cursor: pointer;
+}
+.product-title{
+    font-weight: 400;
+    font-size: 40px;
+    color: #000000;
+    text-align: center;
+    padding-bottom: 50px;
 }

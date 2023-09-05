@@ -65,7 +65,7 @@ function Detail() {
         
       </div>
       <div>
-        <h2>-- Relate Product --</h2>
+        <h2 className={css["product-title"]}>-- Relate Product --</h2>
         {productItem?.relatedProducts && (
           <ListCard list={productItem.relatedProducts} />
         )}
