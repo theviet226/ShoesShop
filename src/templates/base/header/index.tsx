@@ -15,7 +15,7 @@ function Header() {
       <div className={css["header-left"]}>
         <div className={css["header-left-search"]}>
           <IconSearch />
-          <span>Search</span>
+          <Link to="/search">Search</Link>
         </div>
         <div className={css["header-left-cart"]}>
           <Link to="/cart">

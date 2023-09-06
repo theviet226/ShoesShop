@@ -1,12 +1,52 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FbIcon from "src/assets/icons/fb.icon";
 import css from "./login.module.scss";
+import { loginFacebookUser, userLogin } from "src/services/user.service";
+import { setLocalStorage } from "src/utils";
+import { ACCESS_TOKEN } from "src/constants";
+import FacebookLogin from 'react-facebook-login';
 function Login() {
   const [passwordType, setPasswordType] = useState("password");
   const hanldeChangeType = () => {
     setPasswordType((prevType) => (prevType === "text" ? "password" : "text"));
   };
+  const [formLogin, setFormLogin] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const hanldeLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    userLogin(formLogin)
+      .then((resp) => {
+        setLocalStorage(ACCESS_TOKEN, resp.content.accesstoken);
+        navigate("/profile");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setFormLogin({
+      ...formLogin,
+      [name]: value,
+    });
+  }
+  const [loginFacebook,setLoginFacebook] = useState({
+    facebookToken:"",
+  })
+  const responseFacebook = (resp: any) => {
+    console.log(resp);
+    loginFacebookUser(loginFacebook).then(resp =>{
+      setLocalStorage(ACCESS_TOKEN,resp.content.accesstoken)
+      navigate("/profile")
+    }).catch(err =>{
+      console.log(err)
+    })
+  };
+  
   return (
     <>
       <div className={css["login-top"]}>
@@ -16,7 +56,7 @@ function Login() {
       <div className={css["login-form"]}>
         <div>
           <div className={css["login-text"]}>
-            <form>
+            <form onSubmit={hanldeLogin}>
               <label htmlFor="Email" className={css["login-name"]}>
                 Email
               </label>
@@ -25,20 +65,25 @@ function Login() {
                 type="email"
                 placeholder="Email"
                 className={css["login-input"]}
+                value={formLogin.email}
+                name="email"
+                onChange={handleChange}
               />
             </form>
           </div>
           <div className={css["login-text"]}>
-            <form className={css["login-eyes"]}>
+            <form className={css["login-eyes"]} onSubmit={hanldeLogin}>
               <label htmlFor="Password" className={css["login-name"]}>
                 Password
               </label>
               <br />
               <input
+                value={formLogin.password}
                 id="password"
                 type={passwordType}
                 placeholder="Password"
                 className={css["login-input"]}
+                onChange={handleChange}
               />
               {passwordType === "text" ? (
                 <i
@@ -59,13 +104,17 @@ function Login() {
             </button>
           </div>
         </div>
-        <div>
-          <button className={css["login-buttonfb"]}>
-            <FbIcon />
-            <Link to={``} className={css["login-fb"]}>
-              Continue with Facebook
-            </Link>
-          </button>
+        <div className="mx-auto">
+          <FacebookLogin
+            appId="3195280460764608"
+            autoLoad={true}
+            fields="name,email,picture"
+            callback={responseFacebook}
+            cssClass="btn btn-primary btn-lg"
+            icon="fa-facebook"
+            size="metro"
+          />
+          
         </div>
       </div>
     </>

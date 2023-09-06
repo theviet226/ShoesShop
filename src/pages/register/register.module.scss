@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-around;
     font-family: "Roboto";
+    gap: 20px;
     
 }
 .register-input {
@@ -79,9 +80,11 @@ li{
 }
 
 .register-eyes{
+ margin-bottom: -25px;
     :nth-child(4){
         position: relative;
-        right: 30px;
+        left: 417px;
+        bottom: 70px;
         cursor: pointer;
     }
 }
@@ -90,7 +93,7 @@ li{
         position: relative;
         left: 412px;
         bottom: 71px;
-        // display: none;
+        display: none;
         cursor: pointer;
     }
 }

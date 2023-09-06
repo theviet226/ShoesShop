@@ -6,7 +6,10 @@ function Register() {
   const hanldeChangeType = () => {
     setPasswordType((prevType) => (prevType === "text" ? "password" : "text"));
   };
-
+  const [passwordConfirmType, setPasswordConfirmType] = useState("password")
+  const hanldeChangeType1 = () => {
+    setPasswordConfirmType((prevType) => (prevType === "text" ? "password" : "text"));
+  };
   return (
     <div className={css["register-main"]}>
       <div className={css["register-title"]}>Register</div>
@@ -44,7 +47,7 @@ function Register() {
             </form>
           </div>
           <div>
-            <form>
+            <form className={css["register-eyes"]}>
               <label
                 htmlFor="Password confirm"
                 className={css["register-name"]}
@@ -53,10 +56,11 @@ function Register() {
               </label>
               <br />
               <input
-                type="password"
+                type={passwordConfirmType}
                 placeholder="password confirm"
                 className={css["register-input"]}
               />
+              {passwordConfirmType === 'text' ? (<i className="fa-regular fa-eye-slash " onClick={hanldeChangeType1}/>) :(<i className="fa-regular fa-eye" onClick={hanldeChangeType1} />)}
             </form>
           </div>
         </div>

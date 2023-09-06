@@ -15,13 +15,14 @@
     font-weight: 500;
     font-size: 18px;
     color: #00000099;
+    
 }
 .login-input {
     font-family: "Roboto";
     font-weight: 400;
     font-size: 16px;
     background: #21212114;
-
+    border: transparent;
     width: 443px;
     height: 54px;
 
@@ -68,21 +69,7 @@
     box-shadow: 0px 4px 5px 0px #00000024;
     cursor: pointer;
 }
-.login-buttonfb {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 442px;
-    height: 63px;
-    
-    border-radius: 21px;
-    gap: 31.5px;
-    background-color: #1877F2;
-    box-shadow: 0px 38.486881256103516px 71.47562408447266px 0px #00000012;
-    border: transparent;
 
-   
-}
 .login-fb {
     font-family: "ABeeZee";
     font-weight: 400;
