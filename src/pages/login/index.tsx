@@ -5,7 +5,7 @@ import css from "./login.module.scss";
 import { loginFacebookUser, userLogin } from "src/services/user.service";
 import { setLocalStorage } from "src/utils";
 import { ACCESS_TOKEN } from "src/constants";
-import FacebookLogin from 'react-facebook-login';
+import FacebookLogin from "react-facebook-login";
 function Login() {
   const [passwordType, setPasswordType] = useState("password");
   const hanldeChangeType = () => {
@@ -26,6 +26,7 @@ function Login() {
       .catch((err) => {
         console.log(err);
       });
+      console.log(formLogin)
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -33,20 +34,22 @@ function Login() {
       ...formLogin,
       [name]: value,
     });
-  }
-  const [loginFacebook,setLoginFacebook] = useState({
-    facebookToken:"",
-  })
+  };
+  const [loginFacebook, setLoginFacebook] = useState({
+    facebookToken: "",
+  });
   const responseFacebook = (resp: any) => {
     console.log(resp);
-    loginFacebookUser(loginFacebook).then(resp =>{
-      setLocalStorage(ACCESS_TOKEN,resp.content.accesstoken)
-      navigate("/profile")
-    }).catch(err =>{
-      console.log(err)
-    })
+    loginFacebookUser(loginFacebook)
+      .then((resp) => {
+        setLocalStorage(ACCESS_TOKEN, resp.content.accesstoken);
+        navigate("/profile");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  
+
   return (
     <>
       <div className={css["login-top"]}>
@@ -84,6 +87,7 @@ function Login() {
                 placeholder="Password"
                 className={css["login-input"]}
                 onChange={handleChange}
+                name="password"
               />
               {passwordType === "text" ? (
                 <i
@@ -99,22 +103,23 @@ function Login() {
             <Link to={`/register`} className={css["login-register"]}>
               Register now?
             </Link>
-            <button type="submit" className={css["login-button"]}>
-              Login
-            </button>
+            <form onSubmit={hanldeLogin}>
+              <button type="submit" className={css["login-button"]}>
+                Login
+              </button>
+            </form>
           </div>
         </div>
         <div className="mx-auto">
           <FacebookLogin
             appId="3195280460764608"
-            autoLoad={true}
+            autoLoad={false}
             fields="name,email,picture"
             callback={responseFacebook}
             cssClass="btn btn-primary btn-lg"
             icon="fa-facebook"
             size="metro"
           />
-          
         </div>
       </div>
     </>

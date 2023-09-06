@@ -15,7 +15,8 @@
     font-size: 16px;    
     color: rgba(0, 0, 0,0.87);
     border: transparent;
-    margin-bottom:35px;
+    // margin-bottom:35px;
+    
 }
 .register-name{
     font-weight: 500;
@@ -73,27 +74,16 @@ li{
     font-size: 14px;
     font-weight: 500;
     color: rgba(255, 255, 255, 1);
-    cursor: pointer;
+    // cursor: pointer;
 }
 .register-dk{
     text-align: center;
+    margin: 35px 0;
 }
 
-.register-eyes{
- margin-bottom: -25px;
-    :nth-child(4){
-        position: relative;
-        left: 417px;
-        bottom: 70px;
-        cursor: pointer;
-    }
+.register-p{
+    color: red;
 }
-.register-eyes{
-    :nth-child(5){
-        position: relative;
-        left: 412px;
-        bottom: 71px;
-        display: none;
-        cursor: pointer;
-    }
+.register-cofirm{
+    margin-top: -25px;
 }
