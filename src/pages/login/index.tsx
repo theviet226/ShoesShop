@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FbIcon from "src/assets/icons/fb.icon";
 import css from "./login.module.scss";
-import { loginFacebookUser, userLogin } from "src/services/user.service";
-import { setLocalStorage } from "src/utils";
+import { loginFacebookUser, userLogin } from "src/services/user.servie";
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from "src/utils";
 import { ACCESS_TOKEN } from "src/constants";
 import FacebookLogin from "react-facebook-login";
 function Login() {
@@ -16,18 +16,25 @@ function Login() {
     password: "",
   });
   const navigate = useNavigate();
-  const hanldeLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     userLogin(formLogin)
       .then((resp) => {
-        setLocalStorage(ACCESS_TOKEN, resp.content.accesstoken);
+        setLocalStorage(ACCESS_TOKEN,resp.content.accessToken);
         navigate("/profile");
       })
       .catch((err) => {
         console.log(err);
       });
-      console.log(formLogin)
+    console.log(formLogin);
   };
+  // const accessToken = getLocalStorage(ACCESS_TOKEN)
+  // if(accessToken){
+  //   console.log("accessToken:",accessToken)
+  // }else{
+  //   console.log('accessToken không tồn tại')
+  // }
+  // removeLocalStorage(ACCESS_TOKEN)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setFormLogin({
@@ -42,7 +49,7 @@ function Login() {
     console.log(resp);
     loginFacebookUser(loginFacebook)
       .then((resp) => {
-        setLocalStorage(ACCESS_TOKEN, resp.content.accesstoken);
+        setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
         navigate("/profile");
       })
       .catch((err) => {
@@ -58,8 +65,8 @@ function Login() {
       </div>
       <div className={css["login-form"]}>
         <div>
-          <div className={css["login-text"]}>
-            <form onSubmit={hanldeLogin}>
+          <form onSubmit={handleLogin}>
+            <div className={css["login-text"]}>
               <label htmlFor="Email" className={css["login-name"]}>
                 Email
               </label>
@@ -72,17 +79,15 @@ function Login() {
                 name="email"
                 onChange={handleChange}
               />
-            </form>
-          </div>
-          <div className={css["login-text"]}>
-            <form className={css["login-eyes"]} onSubmit={hanldeLogin}>
+            </div>
+            <div className={css["login-text"]}>
               <label htmlFor="Password" className={css["login-name"]}>
                 Password
               </label>
               <br />
               <input
                 value={formLogin.password}
-                id="password"
+                // id="password"
                 type={passwordType}
                 placeholder="Password"
                 className={css["login-input"]}
@@ -93,22 +98,30 @@ function Login() {
                 <i
                   className="fa-regular fa-eye-slash "
                   onClick={hanldeChangeType}
+                  style={{
+                    position:"relative",
+                    right:"40px",
+                    cursor:"pointer",
+                  }}
                 />
               ) : (
-                <i className="fa-regular fa-eye" onClick={hanldeChangeType} />
+                <i className="fa-regular fa-eye" onClick={hanldeChangeType} style={{
+                  position:"relative",
+                  right:"40px",
+                  cursor:"pointer",
+                }} />
               )}
-            </form>
-          </div>
-          <div className={css["login-under"]}>
-            <Link to={`/register`} className={css["login-register"]}>
-              Register now?
-            </Link>
-            <form onSubmit={hanldeLogin}>
+            </div>
+            <div className={css["login-under"]}>
+              <Link to={`/register`} className={css["login-register"]}>
+                Register now?
+              </Link>
+
               <button type="submit" className={css["login-button"]}>
                 Login
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
         <div className="mx-auto">
           <FacebookLogin

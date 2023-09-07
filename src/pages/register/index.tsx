@@ -3,7 +3,7 @@ import css from "./register.module.scss";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Y from "yup";
-import { signup } from "src/services/user.service";
+import { signup } from "src/services/user.servie";
 export type TParamsRegister = {
   email: string;
   password: string;
@@ -54,6 +54,7 @@ function Register() {
         })
         .catch((error) => {
           alert("Error");
+          console.log(error)
         });
       console.log({ value });
     },
@@ -73,7 +74,7 @@ function Register() {
     <div className={css["register-main"]}>
       <div className={css["register-title"]}>Register</div>
       <hr className={css["register-hr"]} />
-      <form onSubmit={formik.handleChange}>
+      <form onSubmit={formik.handleSubmit}>
         <div className={css["register-form"]}>
           <div className={css["register-left"]}>
             <div>
@@ -97,7 +98,8 @@ function Register() {
               </label>
               <br />
               <input
-                id="password"
+              
+                // id="password"
                 type={passwordType}
                 placeholder="password"
                 className={css["register-input"]}
@@ -211,7 +213,7 @@ function Register() {
                   <input
                     type="radio"
                     // name="selector"
-                    id="male"
+                    // id="male"
                     className={css["register-selector"]}
                     {...formik.getFieldProps("gender")}
                   />
@@ -221,7 +223,7 @@ function Register() {
                   <input
                     type="radio"
                     // name="selector"
-                    id="femail"
+                    // id="femail"
                     className={css["register-selector"]}
                     {...formik.getFieldProps("gender")}
                   />

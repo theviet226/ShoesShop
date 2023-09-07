@@ -10,6 +10,7 @@ import { GlobalStyle } from "./components/global-style";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./redux/config-store";
 
+
 //App để config dự án
 export function App() {
   return (
