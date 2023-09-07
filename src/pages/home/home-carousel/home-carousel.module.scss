@@ -4,7 +4,7 @@
 .title-carousel {
     display: grid;
     align-items: center;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     font-family: "Inter";
     padding: 0 1rem;
 }
@@ -19,7 +19,7 @@
 }
 .img-left {
     text-align: center;
-    min-width: 80%;
+    min-width: 70%;
     min-height: auto;
     padding-left: 5rem;
     display: inline !important;

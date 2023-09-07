@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import { IProduct } from "./detail.type";
 import { getProductById } from "src/services/product.service";
 import ListCard from "src/components/list-card";
-import css from "./detail.module.scss"
+import css from "./detail.module.scss";
+import { useDispatch } from "react-redux";
+import { addToCart } from "src/redux/slices/cart.slice";
+
 
 type TPrams = {
   productId: string;
@@ -11,6 +14,17 @@ type TPrams = {
 function Detail() {
   const params = useParams<TPrams>();
   const [productItem, setProductItem] = useState<IProduct>();
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    const productToAdd = {
+      productId: productItem?.id,
+      name: productItem?.name,
+      price: productItem?.price,
+      quantity: 1,
+      image : productItem?.image,
+    };
+    dispatch(addToCart(productToAdd));
+  };
   useEffect(() => {
     if (!params.productId) return;
     getProductById(params.productId)
@@ -29,7 +43,8 @@ function Detail() {
       behavior: "smooth",
     });
   }, [params.productId]);
-    return (
+
+  return (
     <div>
       <div className={css["detail-product"]}>
         <div className="image">
@@ -55,14 +70,16 @@ function Detail() {
           <button className={css["content-button"]}>41</button>
           <button className={css["content-button"]}>42</button>
           <br />
-            <p className={css["content-price"]}>{productItem?.price}$</p>
-            <button className={css["content-cart"]}>+</button>
-            <p className={css["content-quality"]}>1</p>
-            <button className={css["content-cart"]}>-</button>
-            <br />
-            <button className={css["content-buy"]}>Add to cart</button>
+          <p className={css["content-price"]}>{productItem?.price}$</p>
+          <button className={css["content-cart"]}>+</button>
+          <p className={css["content-quality"]}>1</p>
+          <button className={css["content-cart"]}>-</button>
+          <br />
+          <button className={css["content-buy"]} onClick={handleAddToCart}>
+            Add to Cart
+          </button>
         </div>
-        
+
       </div>
       <div>
         <h2 className={css["product-title"]}>-- Relate Product --</h2>

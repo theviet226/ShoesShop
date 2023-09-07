@@ -4,7 +4,7 @@ import HomeCarousel from './home-carousel'
 function HomeSkeleton() {
   return (
     <div>
-      <HomeCarousel/>
+      HomeSkeleton
     </div>
   )
 }
