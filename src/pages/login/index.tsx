@@ -15,6 +15,8 @@ function Login() {
   });
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
+  const [loginError, setLoginError] = useState("");
+
 
   // Kiểm tra AccessToken từ Local Storage khi component được tạo
   useEffect(() => {
@@ -24,16 +26,18 @@ function Login() {
     }
   }, []);
 
-  // Xử lý khi đăng nhập
+
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     userLogin(formLogin)
       .then((resp) => {
         setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
         setIsLoggedIn(true); // Cập nhật trạng thái ngay sau khi đăng nhập thành công
+        setLoginError("");
         navigate("/");
       })
       .catch((err) => {
+        setLoginError("Tên tài khoản hoặc mật khẩu không đúng.");
         console.log(err);
       });
   };
@@ -54,7 +58,7 @@ function Login() {
     loginFacebookUser(loginFacebook)
       .then((resp) => {
         setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
-        setIsLoggedIn(true); // Cập nhật trạng thái ngay sau khi đăng nhập thành công
+        setIsLoggedIn(true);
         navigate("/");
       })
       .catch((err) => {
@@ -64,95 +68,103 @@ function Login() {
 
   return (
     <>
+
       <div className={css["login-top"]}>
         <div className={css["login-title"]}>Login</div>
         <hr className={css["login-hr"]} />
       </div>
-      <div className={css["login-form"]}>
-        <div>
-          {isLoggedIn ? (
-            // Hiển thị thông tin người dùng sau khi đăng nhập thành công
-            <>
-              <div>
-                Welcome, UserNameHere
-                <Link to="/profile">Profile</Link>
-              </div>
-            </>
-          ) : (
-            // Hiển thị form đăng nhập khi chưa đăng nhập
-            <form onSubmit={handleLogin}>
-              <div className={css["login-text"]}>
-                <label htmlFor="Email" className={css["login-name"]}>
-                  Email
-                </label>
-                <br />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className={css["login-input"]}
-                  value={formLogin.email}
-                  name="email"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={css["login-text"]}>
-                <label htmlFor="Password" className={css["login-name"]}>
-                  Password
-                </label>
-                <br />
-                <input
-                  value={formLogin.password}
-                  type={passwordType}
-                  placeholder="Password"
-                  className={css["login-input"]}
-                  onChange={handleChange}
-                  name="password"
-                />
-                {passwordType === "text" ? (
-                  <i
-                    className="fa-regular fa-eye-slash"
-                    onClick={() => setPasswordType("password")}
-                    style={{
-                      position: "relative",
-                      right: "40px",
-                      cursor: "pointer",
-                    }}
-                  />
-                ) : (
-                  <i
-                    className="fa-regular fa-eye"
-                    onClick={() => setPasswordType("text")}
-                    style={{
-                      position: "relative",
-                      right: "40px",
-                      cursor: "pointer",
-                    }}
-                  />
-                )}
-              </div>
-              <div className={css["login-under"]}>
-                <Link to={`/register`} className={css["login-register"]}>
-                  Register now?
-                </Link>
-                <button type="submit" className={css["login-button"]}>
-                  Login
-                </button>
-              </div>
-            </form>
-          )}
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className={css["login-form"]}>
+            <div>
+              {isLoggedIn ? (
+
+                <>
+                  <div>
+                    Welcome, UserNameHere
+                    <Link to="/profile">Profile</Link>
+                  </div>
+                </>
+              ) : (
+
+                <form onSubmit={handleLogin}>
+                  <div className={css["login-text"]}>
+                    <label htmlFor="Email" className={css["login-name"]}>
+                      Email
+                    </label>
+                    <br />
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      className={css["login-input"]}
+                      value={formLogin.email}
+                      name="email"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className={css["login-text"]}>
+                    <label htmlFor="Password" className={css["login-name"]}>
+                      Password
+                    </label>
+                    <br />
+                    <input
+                      value={formLogin.password}
+                      type={passwordType}
+                      placeholder="Password"
+                      className={css["login-input"]}
+                      onChange={handleChange}
+                      name="password"
+                    />
+                    {passwordType === "text" ? (
+                      <i
+                        className="fa-regular fa-eye-slash"
+                        onClick={() => setPasswordType("password")}
+                        style={{
+                          position: "relative",
+                          right: "40px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    ) : (
+                      <i
+                        className="fa-regular fa-eye"
+                        onClick={() => setPasswordType("text")}
+                        style={{
+                          position: "relative",
+                          right: "40px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    )}
+                  </div>
+                  {loginError && <div className={css["login-error"]}>{loginError}</div>}
+                  <div className={css["login-under"]}>
+                    <button type="submit" className={css["login-button"]}>
+                      Login
+                    </button>
+                    <span>Don't have an account yet? <Link to={`/register`} className={css["login-register"]}>
+                      Register now
+                    </Link></span>
+                  </div>
+                </form>
+              )}
+            </div>
+            <div className="mx-auto">
+              <FacebookLogin
+                appId="3195280460764608"
+                autoLoad={false}
+                fields="name,email,picture"
+                callback={responseFacebook}
+                cssClass="btn btn-primary btn-lg"
+                icon="fa-facebook"
+                size="metro"
+              />
+            </div>
+          </div>
         </div>
-        <div className="mx-auto">
-          <FacebookLogin
-            appId="3195280460764608"
-            autoLoad={false}
-            fields="name,email,picture"
-            callback={responseFacebook}
-            cssClass="btn btn-primary btn-lg"
-            icon="fa-facebook"
-            size="metro"
-          />
-        </div>
+
       </div>
+
     </>
   );
 }

@@ -2,44 +2,52 @@ import { createSlice } from "@reduxjs/toolkit";
 import { TCardItem } from "src/types"
 
 type TState = {
-    cartItems: TCardItem[]
+  cartItems: TCardItem[]
 }
 
 const initialState: TState = {
-    cartItems: [],
+  cartItems: [],
 };
 
-// Thay đổi reducer của giỏ hàng
-const cartSlice = createSlice({
-    name: "cart",
-    initialState,
-    reducers: {
-      addToCart: (state, action) => {
-        const newItem = action.payload;
-        const existingItem = state.cartItems.find(
-          (item) => item.id === newItem.productId
-        );
-  
-        if (existingItem) {
-          // Tạo một bản sao của sản phẩm đã tồn tại trong giỏ hàng
-          const updatedItem = { ...existingItem };
-          // Thay đổi số lượng trong sản phẩm đã tồn tại
-          updatedItem.quantity += newItem.quantity;
-  
-          // Tìm và cập nhật sản phẩm đã tồn tại trong mảng giỏ hàng
-          state.cartItems = state.cartItems.map((item) =>
-            item.id === newItem.productId ? updatedItem : item
-          );
-        } else {
-          // Nếu sản phẩm chưa tồn tại trong giỏ hàng, thêm sản phẩm mới vào mảng
-          state.cartItems.push(newItem);
-        }
-      },
-      // Các reducers khác liên quan đến giỏ hàng
-    },
-  });
-  
 
-export const { addToCart } = cartSlice.actions;
+const cartSlice = createSlice({
+  name: "cart",
+  initialState,
+  reducers: {
+    addToCart: (state, action) => {
+      const newItem = action.payload;
+      console.log("first",action.payload)
+      const existingItem = state.cartItems.find(
+        (item) => item.id === newItem.productId
+      );
+      if (existingItem) {
+        const updatedItem = { ...existingItem };
+        updatedItem.quantity += newItem.quantity;
+        state.cartItems = state.cartItems.map((item) =>
+          item.id === newItem.productId ? updatedItem : item
+        );
+      } else {
+        state.cartItems.push(newItem);
+      }
+    },
+    deleteItemCart: (state, action) => {
+      const productIdToDelete = action.payload;
+      console.log("2",action.payload)
+      console.log("id:",productIdToDelete)
+      const remainingItems = state.cartItems.filter(
+        (item) => item.id !== productIdToDelete
+      );
+      state.cartItems = [...remainingItems];
+    },
+    clearCart: (state) => {
+      // Xoá toàn bộ giỏ hàng
+      state.cartItems = [];
+    },
+    
+  },
+});
+
+
+export const { addToCart,clearCart,deleteItemCart  } = cartSlice.actions;
 
 export default cartSlice.reducer;

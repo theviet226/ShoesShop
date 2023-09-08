@@ -13,4 +13,12 @@ export type TCardItem = {
     feature: boolean;
     image: string;
   };
+
+  export type TUserInfo = {
+    id: number;
+    username: string;
+    email: string;
+    sdt:string;
+    // Thêm các trường thông tin khác của người dùng nếu cần
+  };
   

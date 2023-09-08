@@ -1,14 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import css from "./cart.module.scss";
 import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import { setLocalStorage, getLocalStorage } from "src/utils";
-import { addToCart } from "src/redux/slices/cart.slice";
+import { deleteItemCart } from "src/redux/slices/cart.slice";
+import { ACCESS_TOKEN } from "src/constants";
+import { RootState } from "src/redux/config-store";
+type TPrams = {
+  productId: string;
+};
 
 function Cart() {
   const dispatch = useDispatch();
+  const params = useParams<TPrams>();
+  const cartItems = useSelector((state: RootState) => state.cartReducer.cartItems);
 
-  // Lấy dữ liệu giỏ hàng từ Redux
-  const cartItems = useSelector((state) => state.cartReducer.cartItems);
+
+  const handleDelete = (productId:number) => {
+    console.log("Deleting product with ID:", productId);
+    dispatch(deleteItemCart(params.productId));
+  };
+  
+
 
 
 
@@ -61,7 +74,7 @@ function Cart() {
               }}
             >
               {cartItems.map((item, index) => (
-                <tr key={item.productId}>
+                <tr key={index}>
                   <th scope="row">
                     <i
                       className="fa-solid fa-square-check"
@@ -116,23 +129,8 @@ function Cart() {
                       -
                     </button>
                   </td>
-                  <td>{item.total}$</td>
+                  <td>{item.price * item.quantity}$</td>
                   <td>
-                    <button
-                      className="btn me-3"
-                      style={{
-                        boxShadow: "0px 5px 5px 0px #00000033",
-                        width: "80px",
-                        height: "36px",
-                        color: "#ffffff",
-                        backgroundColor: "#6200EE",
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Edit
-                    </button>
                     <button
                       className="btn ms-3"
                       style={{
@@ -145,6 +143,7 @@ function Cart() {
                         fontWeight: "500",
                         cursor: "pointer",
                       }}
+                      onClick={() => handleDelete(item.id)}
                     >
                       Delete
                     </button>

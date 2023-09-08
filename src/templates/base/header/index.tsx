@@ -6,11 +6,19 @@ import { IconCart, IconSearch } from "src/assets/icons";
 import imLogo from "src/assets/images/image3.png";
 import { Link } from "react-router-dom";
 import {  ACCESS_TOKEN } from "src/constants";
+import { useSelector,useDispatch } from "react-redux";
+import { clearCart } from "src/redux/slices/cart.slice";
+import { RootState } from "src/redux/config-store";
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
+  const cartItems = useSelector((state: RootState) => state.cartReducer.cartItems);
+  const dispatch = useDispatch();
 
-  // Kiểm tra AccessToken từ Local Storage khi component được tạo
+  // Đếm số sản phẩm trong giỏ hàng
+  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+
   useEffect(() => {
     const accessToken = getLocalStorage(ACCESS_TOKEN);
     if (accessToken) {
@@ -20,9 +28,12 @@ function Header() {
     }
   }, []);
   const handleLogout = () => {
-    // Thực hiện đăng xuất ở đây, ví dụ: xóa AccessToken từ Local Storage và cập nhật trạng thái đăng nhập.
-    removeLocalStorage(ACCESS_TOKEN); // Xóa AccessToken
-    setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập về false
+    removeLocalStorage(ACCESS_TOKEN); 
+    setIsLoggedIn(false); 
+    removeLocalStorage("userCart");
+    removeLocalStorage("tempCart");
+    removeLocalStorage(ACCESS_TOKEN);
+    dispatch(clearCart());
   };
 
   return (
@@ -40,17 +51,15 @@ function Header() {
             <Link to="/cart">
               <IconCart />
             </Link>
-            <span>(1)</span>
+            <span>({cartItemCount})</span>
           </div>
           <div className={css["header-left-author"]}>
             {isLoggedIn ? (
-              // Hiển thị khi đăng nhập thành công
               <>
                 <Link to="/profile">Profile</Link>
                 <a onClick={handleLogout}>Logout</a>
               </>
             ) : (
-              // Hiển thị khi chưa đăng nhập
               <>
                 <Link to="/login">Login</Link>
                 <Link to="/register">Register</Link>
