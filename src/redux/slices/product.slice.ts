@@ -17,7 +17,7 @@ const productSlice = createSlice({
         setListProduct: (state, action) => {
             //redux + immer: giúp chùng ta clone object, không cần quan tâm đến địa chỉ.
             //ko cần dùng return
-            console.log({action});
+            // console.log({action});
             state.listProduct = action.payload;
             //
         }

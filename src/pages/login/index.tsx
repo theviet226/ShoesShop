@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import FbIcon from "src/assets/icons/fb.icon";
 import css from "./login.module.scss";
 import { loginFacebookUser, userLogin } from "src/services/user.servie";
 import { getLocalStorage, setLocalStorage } from "src/utils";
-import { ACCESS_TOKEN } from "src/constants";
+import { ACCESS_TOKEN, USER_LOGIN } from "src/constants";
 import FacebookLogin from "react-facebook-login";
+import userReducerLogin, { UserLoginResult, UserState, setLogin } from "src/redux/slices/userReducerLogin";
+import { useDispatch } from "react-redux";
 
 function Login() {
   const [passwordType, setPasswordType] = useState("password");
@@ -26,15 +28,21 @@ function Login() {
     }
   }, []);
 
-
+ const dispatch = useDispatch()
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const userLoginResult ={
+      email:formLogin.email,
+      accessToken:""
+    }
     userLogin(formLogin)
       .then((resp) => {
         setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
-        setIsLoggedIn(true); // Cập nhật trạng thái ngay sau khi đăng nhập thành công
-        setLoginError("");
+        dispatch(setLogin(userLoginResult))
+        // setIsLoggedIn(true); // Cập nhật trạng thái ngay sau khi đăng nhập thành công
+        // setLoginError("");
         navigate("/");
+        
       })
       .catch((err) => {
         setLoginError("Tên tài khoản hoặc mật khẩu không đúng.");
@@ -77,7 +85,7 @@ function Login() {
         <div className="row justify-content-center">
           <div className={css["login-form"]}>
             <div>
-              {isLoggedIn ? (
+              {/* {isLoggedIn ? (
 
                 <>
                   <div>
@@ -85,7 +93,7 @@ function Login() {
                     <Link to="/profile">Profile</Link>
                   </div>
                 </>
-              ) : (
+              ) : ( */}
 
                 <form onSubmit={handleLogin}>
                   <div className={css["login-text"]}>
@@ -147,7 +155,7 @@ function Login() {
                     </Link></span>
                   </div>
                 </form>
-              )}
+              {/* )} */}
             </div>
             <div className="mx-auto">
               <FacebookLogin

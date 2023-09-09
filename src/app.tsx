@@ -15,9 +15,11 @@ import { store } from "./redux/config-store";
 export function App() {
   return (
     <ReduxProvider store={store}>
-      <GlobalStyle>
-        <RouterProvider router={router}></RouterProvider>
-      </GlobalStyle>
+      
+        <GlobalStyle>
+          <RouterProvider router={router}></RouterProvider>
+        </GlobalStyle>
+      
     </ReduxProvider>
   );
 }

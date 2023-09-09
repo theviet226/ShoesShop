@@ -21,4 +21,7 @@ export type TCardItem = {
     sdt:string;
     // Thêm các trường thông tin khác của người dùng nếu cần
   };
-  
+  export type TUser = {
+    email:string
+    accessToken:string
+  }
