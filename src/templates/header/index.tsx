@@ -10,9 +10,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "src/redux/slices/cart.slice";
 import { RootState } from "src/redux/config-store";
 import { clearUser } from "src/redux/slices/userReducerLogin";
+import { Search } from "src/templates/search";
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);// Trạng thái đăng nhập
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const cartItems = useSelector(
     (state: RootState) => state.cartReducer.cartItems,
   );
@@ -24,11 +26,20 @@ function Header() {
     (total, item) => total + item.quantity,
     0,
   );
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // Hàm đóng modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   
+
   useEffect(() => {
     const accessToken = getLocalStorage(ACCESS_TOKEN);
-  const storedIsLoggedIn =getLocalStorage('isLoggedIn')
-  setIsLoggedIn(!!accessToken||storedIsLoggedIn)
+    const storedIsLoggedIn = getLocalStorage('isLoggedIn')
+    setIsLoggedIn(!!accessToken || storedIsLoggedIn)
   }, []);
 
   const handleLogout = () => {
@@ -41,24 +52,24 @@ function Header() {
     removeLocalStorage("email")
     dispatch(clearCart());
     dispatch(clearUser());
-    
+
     window.location.reload();
     setIsLoggedIn(false)
-   
+
     navigate("/");
   };
-  
+
   const renderLogin = () => {
-    const [email,setEmail] = useState<string>('')
-   
-    useEffect(()=>{
-setEmail(getLocalStorage('email') || '')
-    },[])
-    
+    const [email, setEmail] = useState<string>('')
+
+    useEffect(() => {
+      setEmail(getLocalStorage('email') || '')
+    }, [])
+
     const { userLogin } = useSelector(
       (state: RootState) => state.userReducerLogin,
     );
-    
+
     if (email !== '') {
       return (
         <div className={css["header-left-author"]}>
@@ -72,20 +83,20 @@ setEmail(getLocalStorage('email') || '')
           </Link>
         </div>
       );
-    }else{
-    return (
-      <>
-       
-       <div className={css["header-left-author"]}>
-          <Link to="/login">Login</Link>
-        </div>
-        <div className={css["header-left-author"]}>
-          <Link to="/register">Register</Link>
-        </div>
-      </>
-    );
+    } else {
+      return (
+        <>
+
+          <div className={css["header-left-author"]}>
+            <Link to="/login">Login</Link>
+          </div>
+          <div className={css["header-left-author"]}>
+            <Link to="/register">Register</Link>
+          </div>
+        </>
+      );
     }
-  };  
+  };
   return (
     <>
       <header className={css.header}>
@@ -93,7 +104,7 @@ setEmail(getLocalStorage('email') || '')
           <img src={imLogo} alt="" />
         </Link>
         <div className={css["header-left"]}>
-          <div className={css["header-left-search"]}>
+          <div onClick={openModal} className={css["header-left-search"]}>
             <IconSearch />
             <Link to="/search">Search</Link>
           </div>
@@ -127,6 +138,9 @@ setEmail(getLocalStorage('email') || '')
           </li>
         </ul>
       </nav>
+      {isModalOpen && (
+        <Search closeModal={closeModal} isOpen={isModalOpen} list={[]} />
+      )}
     </>
   );
 }

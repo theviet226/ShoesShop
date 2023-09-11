@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import FbIcon from "src/assets/icons/fb.icon";
 import css from "./login.module.scss";
-import { loginFacebookUser, userLogin } from "src/services/user.servie";
+import { loginFacebookUser, userLogin } from "src/services/user.service";
 import { getLocalStorage, setLocalStorage } from "src/utils";
 import { ACCESS_TOKEN} from "src/constants";
 import FacebookLogin from "react-facebook-login";

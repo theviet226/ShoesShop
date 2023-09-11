@@ -1,0 +1,129 @@
+/* Modal Container */
+.search-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    background-color: #fff;
+    animation: slideInFromBottom 0.5s ease forwards;
+
+    &.closed {
+        animation: slideOutToTop 0.5s ease forwards;
+    }
+   
+    &.open {
+        .search-modal-content {
+            transform: translateY(0);
+        }
+    }
+}
+
+.search-modal-content {
+    display: flex;
+    gap: 2rem; 
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+
+.search-modal-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right:25px;
+}
+
+
+.search-modal-content ul li {
+    flex: 0 1 calc(25% - 1rem); 
+    margin: 0.5rem; 
+    border: 1px solid #ccc;
+    padding: 1rem; 
+    text-align: center; 
+    
+}
+
+
+
+
+.search-form {
+    position: relative;
+    flex: 0 0 auto;
+    padding-right: 100px;
+    padding-left: 100px;
+    border-bottom: 1px solid gray;
+    opacity: 0;
+    transition: opacity .35s ease .2s;
+    opacity: 1;
+}
+
+.search-input {
+    position: relative;
+    padding: 0;
+    height: 110px;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    color: #333;
+    text-align: center;
+    font-weight: 600;
+    font-size: 48px;
+    width: 100%;
+    max-width: 100%;
+    outline: none;
+}
+
+.search-text {
+    display: block;
+    flex: 0 0 auto;
+    overflow: hidden;
+    margin-top: 10px;
+    text-align: center;
+    letter-spacing: .3px;
+    font-size: 16px;
+    line-height: 30px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 500;
+    width: 50px;
+    height: 50px;
+    line-height: 100px;
+    font-size: 50px;
+    color: #000;
+    cursor: pointer;
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutToTop {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}

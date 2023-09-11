@@ -4,38 +4,47 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "src/redux/config-store";
 import { setProfile, userProfile } from "src/redux/slices/userReducerLogin";
-import { getUserProfile } from "src/services/user.servie";
+import { getUserProfile } from "src/services/user.service";
 
 function Profile() {
   const { userProfile } = useSelector(
-    (state: RootState) => state.userReducerLogin,
+    (state: RootState) => state.userReducerLogin
   );
+
   const dispatch = useDispatch();
   const userFormProfile = useFormik({
     initialValues: {
-      email: userProfile?.email ?? "",
-      name: userProfile?.name ?? "",
-      phone: userProfile?.phone ?? "",
-      password: userProfile?.password ?? "",
-      avatar: userProfile?.avatar ?? "",
+      email: userProfile?.email || "",
+      name: userProfile?.name || "",
+      phone: userProfile?.phone || "",
+      password: userProfile?.password || "",
+      avatar: userProfile?.avatar || "",
     },
-    onSubmit: (values: any) => {},
+    onSubmit: (values: any) => {
+      // Xử lý khi người dùng gửi biểu mẫu
+    },
   });
+
+
   useEffect(() => {
     getUserProfile()
       .then((resp) => {
-        dispatch(setProfile(resp));
-        console.log(resp);
-        userFormProfile.setValues({
-          email: resp.email,
-          name: resp.name,
-          phone: resp.phone,
-          password: resp.password,
-          avatar: resp.avatar,
-        });
+        const infoUser = resp.content
+        if (resp) {
+          dispatch(setProfile(infoUser));
+          console.log(resp);
+          userFormProfile.setValues({
+            email: infoUser.email || "",
+            name: infoUser.name || "",
+            phone: infoUser.phone || "",
+            password: infoUser.password || "",
+            avatar: infoUser.avatar || "",
+          });
+        }
       })
       .catch((e) => console.log(e));
   }, []);
+
   return (
     <div style={{ paddingTop: "30px" }}>
       <h3
@@ -65,7 +74,7 @@ function Profile() {
                 className=" rounded-circle"
                 width={200}
                 height={200}
-                // {...userFormProfile.getFieldProps('avtar')}
+              // {...userFormProfile.getFieldProps('avtar')}
               />
             </div>
             <div className="col-8">
@@ -85,8 +94,8 @@ function Profile() {
                       </p>
                       <input
                         className="form-control"
-                       type="email"
-                        placeholder="Email"
+                        type="email"
+
                         style={{
                           height: "54px",
                           fontSize: "16px",
@@ -95,10 +104,10 @@ function Profile() {
                           color: "#000000DE",
                           background: "#21212114",
                         }}
-                        // value={userProfile?.email}
-                        // onChange={userFormProfile.handleChange}
-                        // onBlur={userFormProfile.handleBlur}
-                        {...userFormProfile.getFieldProps('email')}
+                        value={userFormProfile?.values.email}
+                      // onChange={userFormProfile.handleChange}
+                      // onBlur={userFormProfile.handleBlur}
+                      // {...userFormProfile.getFieldProps('email')}
                       />
                     </div>
                     <div className="form-group">
@@ -184,7 +193,7 @@ function Profile() {
                           color: "#000000DE",
                           background: "#21212114",
                         }}
-                        
+
                         // value={
                         //   userProfile?.password ? userProfile?.password : "123"
                         // }
@@ -194,55 +203,6 @@ function Profile() {
                       />
                     </div>
                     <div className="form-group d-flex ">
-                      <div className="w-75">
-                        <p
-                          style={{
-                            fontFamily: "Roboto",
-                            fontSize: "18px",
-                            fontWeight: "500",
-                            color: "#00000099",
-                          }}
-                        >
-                          Gender
-                        </p>
-                        <input
-                          name="password"
-                          type="radio"
-                          style={{
-                            width: "25px",
-                            height: "25px",
-                            margin: "0 25px",
-                          }}
-                        />
-                        <span
-                          style={{
-                            position: "relative",
-                            top: "25px",
-                            right: "54px",
-                          }}
-                        >
-                          Male
-                        </span>
-
-                        <input
-                          name="password"
-                          type="radio"
-                          style={{
-                            width: "25px",
-                            height: "25px",
-                            margin: "0 25px",
-                          }}
-                        />
-                        <span
-                          style={{
-                            position: "relative",
-                            top: "25px",
-                            right: "60px",
-                          }}
-                        >
-                          Famale
-                        </span>
-                      </div>
                       <div className="text-right w-25 mt-5">
                         <button
                           type="submit"

@@ -3,7 +3,7 @@ import css from "./register.module.scss";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Y from "yup";
-import { signup } from "src/services/user.servie";
+import { signup } from "src/services/user.service";
 export type TParamsRegister = {
   email: string;
   password: string;
