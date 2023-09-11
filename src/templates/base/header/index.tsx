@@ -12,7 +12,7 @@ import { RootState } from "src/redux/config-store";
 import { clearUser } from "src/redux/slices/userReducerLogin";
 
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
+  const [isLoggedIn, setIsLoggedIn] = useState(true);// Trạng thái đăng nhập
   const cartItems = useSelector(
     (state: RootState) => state.cartReducer.cartItems,
   );
@@ -24,36 +24,45 @@ function Header() {
     (total, item) => total + item.quantity,
     0,
   );
-
+  
   useEffect(() => {
     const accessToken = getLocalStorage(ACCESS_TOKEN);
-    if (accessToken) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
+  const storedIsLoggedIn =getLocalStorage('isLoggedIn')
+  setIsLoggedIn(!!accessToken||storedIsLoggedIn)
   }, []);
+
   const handleLogout = () => {
+
     removeLocalStorage(ACCESS_TOKEN);
-    setIsLoggedIn(false);
     removeLocalStorage("userCart");
     removeLocalStorage("tempCart");
     removeLocalStorage(ACCESS_TOKEN);
+    removeLocalStorage("isLoggedIn")
+    removeLocalStorage("email")
     dispatch(clearCart());
     dispatch(clearUser());
+    
     window.location.reload();
+    setIsLoggedIn(false)
+   
     navigate("/");
   };
-
+  
   const renderLogin = () => {
+    const [email,setEmail] = useState<string>('')
+   
+    useEffect(()=>{
+setEmail(getLocalStorage('email') || '')
+    },[])
+    
     const { userLogin } = useSelector(
       (state: RootState) => state.userReducerLogin,
     );
-    const isLoggedIn = userLogin !== null;
-    if (isLoggedIn) {
+    
+    if (email !== '') {
       return (
         <div className={css["header-left-author"]}>
-          <Link to="/profile">{userLogin.email}</Link>
+          <Link to="/profile">{email}</Link>
           <Link
             to="/"
             className={css["header-left-author"]}
@@ -63,10 +72,11 @@ function Header() {
           </Link>
         </div>
       );
-    }
+    }else{
     return (
       <>
-        <div className={css["header-left-author"]}>
+       
+       <div className={css["header-left-author"]}>
           <Link to="/login">Login</Link>
         </div>
         <div className={css["header-left-author"]}>
@@ -74,7 +84,8 @@ function Header() {
         </div>
       </>
     );
-  };
+    }
+  };  
   return (
     <>
       <header className={css.header}>

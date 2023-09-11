@@ -18,5 +18,6 @@ axiosWithAuth.interceptors.request.use(
         return config
     },
     (e) =>{ 
+        return Promise.reject(e)
     }
 )

@@ -4,10 +4,11 @@ import FbIcon from "src/assets/icons/fb.icon";
 import css from "./login.module.scss";
 import { loginFacebookUser, userLogin } from "src/services/user.servie";
 import { getLocalStorage, setLocalStorage } from "src/utils";
-import { ACCESS_TOKEN, USER_LOGIN } from "src/constants";
+import { ACCESS_TOKEN} from "src/constants";
 import FacebookLogin from "react-facebook-login";
-import userReducerLogin, { UserLoginResult, UserState, setLogin } from "src/redux/slices/userReducerLogin";
+import  { setLogin } from "src/redux/slices/userReducerLogin";
 import { useDispatch } from "react-redux";
+
 
 function Login() {
   const [passwordType, setPasswordType] = useState("password");
@@ -18,8 +19,15 @@ function Login() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
   const [loginError, setLoginError] = useState("");
-
-
+ 
+const [email,setEmail] = useState('')
+useEffect(()=>{
+  const storedEmail = getLocalStorage("email")
+  if(storedEmail){
+    setIsLoggedIn(true)
+    setEmail(storedEmail)
+  }
+},[])
   // Kiểm tra AccessToken từ Local Storage khi component được tạo
   useEffect(() => {
     const accessToken = getLocalStorage(ACCESS_TOKEN);
@@ -37,11 +45,16 @@ function Login() {
     }
     userLogin(formLogin)
       .then((resp) => {
+       
         setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
         dispatch(setLogin(userLoginResult))
-        // setIsLoggedIn(true); // Cập nhật trạng thái ngay sau khi đăng nhập thành công
-        // setLoginError("");
+        const accessToken = resp.content.accessToken;
+        const email = formLogin.email
+        setLocalStorage("accessToken",accessToken)
+        setLocalStorage("email",email)
+        
         navigate("/");
+        window.location.reload()
         
       })
       .catch((err) => {
@@ -76,7 +89,6 @@ function Login() {
 
   return (
     <>
-
       <div className={css["login-top"]}>
         <div className={css["login-title"]}>Login</div>
         <hr className={css["login-hr"]} />
@@ -85,15 +97,15 @@ function Login() {
         <div className="row justify-content-center">
           <div className={css["login-form"]}>
             <div>
-              {/* {isLoggedIn ? (
-
-                <>
-                  <div>
-                    Welcome, UserNameHere
-                    <Link to="/profile">Profile</Link>
-                  </div>
-                </>
-              ) : ( */}
+            {/* {isLoggedIn ? (
+        <p>Welcome {email}!</p>
+      ) : (
+        <form onSubmit={handleLogin}>
+          <input type="email" name="email" />
+          <input type="password" name="password" />
+          <button type="submit">Login</button>
+        </form>
+      )} */}
 
                 <form onSubmit={handleLogin}>
                   <div className={css["login-text"]}>

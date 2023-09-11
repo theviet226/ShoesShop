@@ -1,5 +1,7 @@
 import { TParamsRegister } from "src/pages/register";
 import { axiosWithAuth, axiosWithoutAuth } from "./config.service";
+import { getLocalStorage } from "src/utils";
+import { ACCESS_TOKEN } from "src/constants";
 
 export const userLogin = async (data: { email: string; password: string }) => {
   try {
@@ -38,16 +40,11 @@ export const signup = async (data: TParamsRegister) => {
   }
 };
 export const getUserProfile = async () =>{
-  // const resp = await 
-  // axios({
-  //     url:"https://shop.cyberlearn.vn/api/Users/getProfile",
-  //     method:"post",
-  //     headers:{
-  //         Authorization:`Bearer ${getLocalStorage(ACCESS_TOKEN)}`
-  //     }
+  
   const resp = await axiosWithAuth({
       url: "/Users/getProfile",
       method:"POST",
+  
   })
   
   return resp.data
