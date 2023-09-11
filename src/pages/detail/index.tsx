@@ -72,9 +72,10 @@ function Detail() {
         <div className="image">
           <img
             style={{
-              width: 800,
+              width: 600,
               height: 600,
-              backgroundColor: "#F8F8F8"
+              backgroundColor: "#F8F8F8",
+              alignItems:"center"
             }}
             src={productItem?.image}
           />

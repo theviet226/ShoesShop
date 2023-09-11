@@ -60,7 +60,7 @@ const HomeCarousel: React.FC = () => {
                 The adidas Primeknit upper wraps the foot with a supportive fit
                 that enhances movement.
               </p>
-              <button className={css["carousel-button"]}>Buy</button>
+              <a className={css["carousel-button"]} href="http://localhost:5173/detail/2">Buy</a>
             </div>
           </div>
         </div>
@@ -78,7 +78,7 @@ const HomeCarousel: React.FC = () => {
                 The adidas Primeknit upper wraps the foot with a supportive fit
                 that enhances movement.
               </p>
-              <button className={css["carousel-button"]}>Buy</button>
+              <a className={css["carousel-button"]} href="http://localhost:5173/detail/3">Buy</a>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ const HomeCarousel: React.FC = () => {
                 The adidas Primeknit upper wraps the foot with a supportive fit
                 that enhances movement.
               </p>
-              <button className={css["carousel-button"]}>Buy</button>
+              <a className={css["carousel-button"]} href="http://localhost:5173/detail/1">Buy</a>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@ const HomeCarousel: React.FC = () => {
                 The adidas Primeknit upper wraps the foot with a supportive fit
                 that enhances movement.
               </p>
-              <button className={css["carousel-button"]}>Buy</button>
+              <a className={css["carousel-button"]} href="http://localhost:5173/detail/4">Buy</a>
             </div>
           </div>
         </div>
