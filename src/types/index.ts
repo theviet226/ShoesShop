@@ -12,6 +12,7 @@ export type TCardItem = {
     relatedProducts: string;
     feature: boolean;
     image: string;
+    productId: number
   };
 
   export type TUserInfo = {

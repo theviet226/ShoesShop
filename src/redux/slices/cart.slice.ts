@@ -3,11 +3,13 @@ import Item from "antd/es/list/Item";
 import { TCardItem } from "src/types"
 
 type TState = {
-  cartItems: TCardItem[]
+  cartItems: TCardItem[],
+ 
 }
 
 const initialState: TState = {
   cartItems: [],
+  
 };
 
 

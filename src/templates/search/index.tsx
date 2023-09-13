@@ -7,6 +7,14 @@ interface SearchProps {
   closeModal: () => void;
   isOpen: boolean;
   list: TCard[]
+
+}
+interface Product{
+  image: string;
+  name: string;
+  shortDescription: string;
+  price: number;
+  id: number;
 }
 // type Props = {
 //   list: TCard[]
@@ -14,7 +22,7 @@ interface SearchProps {
 
 export const Search: React.FC<SearchProps> = ({ closeModal, isOpen, list }) => {
   const [searchValue, setSearchValue] = useState('');
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
