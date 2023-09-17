@@ -1,27 +1,18 @@
 import React, { useRef } from "react";
-import { TCard } from "../../../components/card";
+
 import { Carousel } from "antd";
 import { CarouselRef } from "antd/es/carousel";
 import css from "./home-carousel.module.scss";
 import PrevIcon from "src/assets/icons/prev.icon";
 import NextIcon from "src/assets/icons/next.icon";
-type Props = {
-  data: TCard[];
-};
+// type Props = {
+//   data: TCard[];
+// };
 
-const contentStyle: React.CSSProperties = {
-  margin: 0,
-  height: "160px",
-  color: "#fff",
-  lineHeight: "160px",
-  textAlign: "center",
-  background: "#364d79",
-};
+
 
 const HomeCarousel: React.FC = () => {
-  const onChange = (currentSlide: number) => {
-    // console.log(currentSlide);
-  };
+
 
   const refCarousel = useRef<CarouselRef>(null);
 
@@ -43,7 +34,7 @@ const HomeCarousel: React.FC = () => {
       <Carousel
         ref={refCarousel}
         autoplay
-        afterChange={onChange}
+        
         className={css["carousel-main"]}
       >
         <div className={css["inf-home"]}>

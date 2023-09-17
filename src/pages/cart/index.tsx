@@ -1,22 +1,32 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import css from "./cart.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setLocalStorage, getLocalStorage } from "src/utils";
-import { deleteItemCart,updateItemQuantity  } from "src/redux/slices/cart.slice";
-import { ACCESS_TOKEN } from "src/constants";
+import { clearCart, deleteItemCart, updateItemQuantity } from "src/redux/slices/cart.slice";
+// import { ACCESS_TOKEN } from "src/constants";
 import { RootState } from "src/redux/config-store";
+import { placeOrder } from "src/services/oder.service";
+
+
 type TPrams = {
   productId: string;
+  email: string;
 };
+
+
 
 function Cart() {
   const dispatch = useDispatch();
   const params = useParams<TPrams>();
   const cartItems = useSelector((state: RootState) => state.cartReducer.cartItems);
+
   const [quantity, setQuantity] = useState<number[]>(cartItems.map(item => item.quantity));
   const [totalPrice, setTotalPrice] = useState<number[]>(cartItems.map(item => item.price * item.quantity));
   const totalAmount = totalPrice.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const [isOrdering, setIsOrdering] = useState(false);
+  const [isTotalShown, setIsTotalShown] = useState(true);
+
 
 
   const handleDelete = (productId: number) => {
@@ -25,7 +35,6 @@ function Cart() {
   };
 
   const handleIncreaseQuantity = (index: number) => {
-    // Tăng số lượng sản phẩm và cập nhật giá tiền
     const updatedQuantity = [...quantity];
     const updatedTotalPrice = [...totalPrice];
 
@@ -39,7 +48,6 @@ function Cart() {
     dispatch(updateItemQuantity({ productId: cartItems[index].id, quantity: updatedQuantity[index] }));
   };
   const handleDecreaseQuantity = (index: number) => {
-    // Giảm số lượng sản phẩm và cập nhật giá tiền
     if (quantity[index] > 1) {
       const updatedQuantity = [...quantity];
       const updatedTotalPrice = [...totalPrice];
@@ -50,13 +58,39 @@ function Cart() {
       setQuantity(updatedQuantity);
       setTotalPrice(updatedTotalPrice);
 
-      // Dispatch action để cập nhật số lượng sản phẩm trong Redux
       dispatch(updateItemQuantity({ productId: cartItems[index].id, quantity: updatedQuantity[index] }));
+    }
+  };
+  const handleSubmitOrder = async () => {
+    try {
+      setIsOrdering(true);
+
+      const orderDetail = cartItems.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      }));
+      console.log(orderDetail)
+
+
+      const userEmail = getLocalStorage("email");
+
+      const response = await placeOrder(orderDetail, userEmail);
+
+      if (response) {
+        alert("Order successful!");
+        dispatch(clearCart());
+        setIsTotalShown(false)
+      }
+    } catch (error) {
+      alert("Order failed. Please try again later.");
+    } finally {
+      setIsOrdering(false);
     }
   };
 
 
-  // Cập nhật Local Storage mỗi khi giỏ hàng thay đổi
+
+
   useEffect(() => {
     setLocalStorage("cart", cartItems);
   }, [cartItems]);
@@ -193,26 +227,30 @@ function Cart() {
                   height: "31px",
                 }}
               >
-                 <td colSpan={7}></td>
-          <td>
-            <div>
-              Total: {totalAmount}$ {/* Hiển thị tổng giá tiền */}
-            </div>
-            <button
-              className="btn"
-              style={{
-                fontSize: "14px",
-                fontWeight: "500",
-                backgroundColor: "#F2994A",
-                color: "#FFFFFF",
-                width: "152px",
-                height: "41px",
-                boxShadow: "0px 5px 5px 0px #00000033",
-              }}
-            >
-              SUBMIT ORDER
-            </button>
-          </td>
+                <td colSpan={7}></td>
+                <td>
+                  {isTotalShown && (
+                    <div>
+                      Total: {totalAmount}$
+                    </div>
+                  )}
+                  <button
+                    className="btn"
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      backgroundColor: "#F2994A",
+                      color: "#FFFFFF",
+                      width: "152px",
+                      height: "41px",
+                      boxShadow: "0px 5px 5px 0px #00000033",
+                    }}
+                    onClick={handleSubmitOrder}
+                    disabled={isOrdering}
+                  >
+                    {isOrdering ? "Ordering..." : "SUBMIT ORDER"}
+                  </button>
+                </td>
 
               </tfoot>
             </table>

@@ -1,4 +1,4 @@
-import React from "react";
+
 import css from "./footer.module.scss";
 function Footer() {
   return (
@@ -61,7 +61,7 @@ function Footer() {
       </div>
       <div className={css["footer-reserved"]}>
         <p className={css["footer-text"]}>
-          © 2023 Cybersoft All Right Reserved
+          © 2023 Copy All Right Reserved
           <span> |</span> Design Theme by Thanh Quí & Thế Việt
         </p>
       </div>

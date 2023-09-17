@@ -1,4 +1,4 @@
-import  axios  from "axios";
+import axios from "axios";
 import { ACCESS_TOKEN } from "src/constants";
 import { getLocalStorage } from "src/utils";
 
@@ -9,15 +9,15 @@ export const axiosWithAuth = axios.create({
     timeout: 180_000, //ms -> 3p, sau 3p thi ngat ket noi api
 });
 export const axiosWithoutAuth = axios.create({
-    baseURL:BASE_URL,
-    timeout:180_00
+    baseURL: BASE_URL,
+    timeout: 180_00
 })
 axiosWithAuth.interceptors.request.use(
-    (config) =>{
+    (config) => {
         config.headers["Authorization"] = `Bearer ${getLocalStorage(ACCESS_TOKEN)}`
         return config
     },
-    (e) =>{ 
+    (e) => {
         return Promise.reject(e)
     }
 )

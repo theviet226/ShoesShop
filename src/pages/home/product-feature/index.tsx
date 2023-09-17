@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import css from "./product-feature.module.scss"
 import ListCard from 'src/components/list-card'
 import {useAppSelector} from 'src/redux/config-store'

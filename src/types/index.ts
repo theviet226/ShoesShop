@@ -1,4 +1,5 @@
 export type TCardItem = {
+    productId: any;
     id: number;
     name: string;
     alias: string;

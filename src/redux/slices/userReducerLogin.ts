@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { PROFILE, USER_LOGIN } from "src/constants";
 
-import { getLocalStorage, setLocalStorage } from "src/utils";
+import { getLocalStorage } from "src/utils";
 export interface userProfile {
     ordersHistory: OrdersHistory[];
     email: string;
@@ -62,11 +62,16 @@ const userReducerLogin = createSlice({
         },
         setProfile: (state: UserState, action: PayloadAction<userProfile>) => {
             state.userProfile = action.payload
-        }
+        },
+        updateOrderHistory: (state: UserState, action: PayloadAction<OrdersHistory[]>) => {
+            if (state.userProfile) {
+              state.userProfile.ordersHistory = action.payload;
+            }
+          },
     },
 })
 
 
-export const { setLogin, clearUser, setProfile } = userReducerLogin.actions
+export const { setLogin, clearUser, setProfile,updateOrderHistory  } = userReducerLogin.actions
 export default userReducerLogin.reducer
 

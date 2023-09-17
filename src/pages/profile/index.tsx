@@ -1,15 +1,19 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+// import { useParams } from "react-router-dom";
+import css from "./profile.module.scss"
 
 import { RootState } from "src/redux/config-store";
-import { setProfile, userProfile } from "src/redux/slices/userReducerLogin";
+import { setProfile, updateOrderHistory } from "src/redux/slices/userReducerLogin";
 import { getUserProfile } from "src/services/user.service";
 
 function Profile() {
+ 
   const { userProfile } = useSelector(
     (state: RootState) => state.userReducerLogin
   );
+  const [orderHistory, setOrderHistory] = useState<String[]>([]);
 
   const dispatch = useDispatch();
   const userFormProfile = useFormik({
@@ -20,8 +24,8 @@ function Profile() {
       password: userProfile?.password || "",
       avatar: userProfile?.avatar || "",
     },
-    onSubmit: (values: any) => {
-      // Xử lý khi người dùng gửi biểu mẫu
+    onSubmit: () => {
+
     },
   });
 
@@ -29,10 +33,19 @@ function Profile() {
   useEffect(() => {
     getUserProfile()
       .then((resp) => {
-        const infoUser = resp.content
+        const infoUser = resp.content;
+        console.log("hihi", infoUser);
         if (resp) {
           dispatch(setProfile(infoUser));
-          console.log(resp);
+
+
+          const orderHistory = infoUser.ordersHistory;
+          console.log(orderHistory)
+
+          dispatch(updateOrderHistory(orderHistory));
+          setOrderHistory(infoUser.ordersHistory);
+
+
           userFormProfile.setValues({
             email: infoUser.email || "",
             name: infoUser.name || "",
@@ -193,7 +206,6 @@ function Profile() {
                           color: "#000000DE",
                           background: "#21212114",
                         }}
-
                         // value={
                         //   userProfile?.password ? userProfile?.password : "123"
                         // }
@@ -203,7 +215,7 @@ function Profile() {
                       />
                     </div>
                     <div className="form-group d-flex ">
-                      <div className="text-right w-25 mt-5">
+                      <div className="text-right w-25 mt-5" style={{marginRight :"20px"}}>
                         <button
                           type="submit"
                           className="btn"
@@ -216,9 +228,28 @@ function Profile() {
                             borderRadius: "50px",
                             fontWeight: "500",
                             fontFamily: "Roboto",
+                            
                           }}
                         >
                           Update
+                        </button>
+                      </div>
+                      <div className="text-right w-25 mt-5">
+                        <button
+                          type="submit"
+                          className="btn"
+                          style={{
+                            background: "#6200EE",
+                            color: "#eeeeee",
+                            width: "180px",
+                            height: "48px",
+                            fontSize: "20px",
+                            borderRadius: "50px",
+                            fontWeight: "500",
+                            fontFamily: "Roboto",
+                          }}
+                        >
+                          Change Password
                         </button>
                       </div>
                     </div>
@@ -280,21 +311,8 @@ function Profile() {
             </li>
           </ul>
         </div>
-        <div
-          style={{
-            padding: "40px 0",
-          }}
-        >
-          <p
-            style={{
-              fontFamily: "Roboto",
-              fontSize: "20px",
-              fontWeight: "400",
-              color: "#cb0dc3",
-            }}
-          >
-            + Orders have been placed on 09 - 19 - 2020
-          </p>
+        <div style={{ paddingTop: "30px" }}>
+
           <div className="table">
             <table className="table" style={{ border: "transparent" }}>
               <thead className="table-secondary">
@@ -312,28 +330,53 @@ function Profile() {
                   <td scope="col">Price</td>
                   <td scope="col">Quantity</td>
                   <td scope="col">Total</td>
+                  <td scope="col">Date</td>
                 </tr>
               </thead>
-              <tr style={{ textAlign: "center" }}>
-                <td>1</td>
-                <td>
-                  <img
-                    src="https://i.pravatar.cc"
-                    style={{
-                      width: "75px",
-                      height: "75px",
-                    }}
-                    alt=""
-                  />
-                </td>
-                <td>Product 1</td>
-                <td>1000</td>
-                <td>1</td>
-                <td>1000</td>
-              </tr>
+              <tbody>
+                {orderHistory.map((order: any, index: number) => (
+                  <React.Fragment key={index}>
+                    <tr style={{ textAlign: "center" }}>
+                      <td>{order.id}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{new Date(order.date).toLocaleDateString()}</td>
+                    </tr>
+                    {order.orderDetail.map((product: any, productIndex: number) => (
+                      <tr key={productIndex} className={css["table-row"]} style={{ textAlign: "center" }}>
+                        <td></td>
+                        <td>
+                          <img
+                            src={product.image}
+                            style={{
+                              width: "75px",
+                              height: "75px",
+                            }}
+                            alt=""
+                          />
+                        </td>
+                        <td>{product.name}</td>
+                        <td>{product.price}</td>
+                        <td>{product.quantity}</td>
+                        <td>{product.quantity * product.price}</td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </tbody>
+
+
+
+
             </table>
           </div>
+
+          {/* Các phần khác của giao diện */}
         </div>
+
       </div>
     </div>
   );

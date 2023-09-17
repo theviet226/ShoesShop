@@ -1,4 +1,4 @@
-import React from "react";
+
 import css from "./search.module.scss"
 
 function Search() {

@@ -12,7 +12,7 @@ interface SearchProps {
 //   list: TCard[]
 // }
 
-export const Search: React.FC<SearchProps> = ({ closeModal, isOpen, list }) => {
+export const Search: React.FC<SearchProps> = ({ closeModal, isOpen }) => {
   const [searchValue, setSearchValue] = useState('');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -59,7 +59,7 @@ export const Search: React.FC<SearchProps> = ({ closeModal, isOpen, list }) => {
         <div className={css['search-modal-content']}>
           {products.length > 0 ? (
             <ul>
-              {products.map((product) => (
+              {products.map((product:any) => (
                 <Card key={product.id} data={product} />
               ))}
             </ul>

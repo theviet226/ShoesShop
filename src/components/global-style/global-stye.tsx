@@ -1,4 +1,4 @@
-import React, {ReactNode,Fragment,PropsWithChildren} from 'react';
+import  {ReactNode,Fragment} from 'react';
 import "./global-style.scss";
 
 type Props ={

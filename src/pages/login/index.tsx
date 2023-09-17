@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import FbIcon from "src/assets/icons/fb.icon";
+import { Link, useNavigate } from "react-router-dom";
+// import FbIcon from "src/assets/icons/fb.icon";
 import css from "./login.module.scss";
-import { loginFacebookUser, userLogin } from "src/services/user.service";
+import {  userLogin } from "src/services/user.service";
 import { getLocalStorage, setLocalStorage } from "src/utils";
-import { ACCESS_TOKEN} from "src/constants";
-import FacebookLogin from "react-facebook-login";
-import  { setLogin } from "src/redux/slices/userReducerLogin";
+import { ACCESS_TOKEN } from "src/constants";
+// import FacebookLogin from "react-facebook-login";
+import { setLogin } from "src/redux/slices/userReducerLogin";
 import { useDispatch } from "react-redux";
 
 
@@ -19,15 +19,15 @@ function Login() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
   const [loginError, setLoginError] = useState("");
- 
-const [email,setEmail] = useState('')
-useEffect(()=>{
-  const storedEmail = getLocalStorage("email")
-  if(storedEmail){
-    setIsLoggedIn(true)
-    setEmail(storedEmail)
-  }
-},[])
+
+  const [email, setEmail] = useState('')
+  useEffect(() => {
+    const storedEmail = getLocalStorage("email")
+    if (storedEmail) {
+      setIsLoggedIn(true)
+      setEmail(storedEmail)
+    }
+  }, [])
   // Kiểm tra AccessToken từ Local Storage khi component được tạo
   useEffect(() => {
     const accessToken = getLocalStorage(ACCESS_TOKEN);
@@ -36,26 +36,26 @@ useEffect(()=>{
     }
   }, []);
 
- const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userLoginResult ={
-      email:formLogin.email,
-      accessToken:""
+    const userLoginResult = {
+      email: formLogin.email,
+      accessToken: ""
     }
     userLogin(formLogin)
       .then((resp) => {
-       
+
         setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
         dispatch(setLogin(userLoginResult))
         const accessToken = resp.content.accessToken;
         const email = formLogin.email
-        setLocalStorage("accessToken",accessToken)
-        setLocalStorage("email",email)
-        
+        setLocalStorage("accessToken", accessToken)
+        setLocalStorage("email", email)
+
         navigate("/");
         window.location.reload()
-        
+
       })
       .catch((err) => {
         setLoginError("Tên tài khoản hoặc mật khẩu không đúng.");
@@ -72,20 +72,20 @@ useEffect(()=>{
   };
 
 
-  const [loginFacebook, setLoginFacebook] = useState({
-    facebookToken: "",
-  });
-  const responseFacebook = (resp: any) => {
-    loginFacebookUser(loginFacebook)
-      .then((resp) => {
-        setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
-        setIsLoggedIn(true);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const [loginFacebook, setLoginFacebook] = useState({
+  //   facebookToken: "",
+  // });
+  // const responseFacebook = () => {
+  //   loginFacebookUser(loginFacebook)
+  //     .then((resp) => {
+  //       setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
+  //       setIsLoggedIn(true);
+  //       navigate("/");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   return (
     <>
@@ -97,16 +97,9 @@ useEffect(()=>{
         <div className="row justify-content-center">
           <div className={css["login-form"]}>
             <div>
-            {/* {isLoggedIn ? (
-        <p>Welcome {email}!</p>
-      ) : (
-        <form onSubmit={handleLogin}>
-          <input type="email" name="email" />
-          <input type="password" name="password" />
-          <button type="submit">Login</button>
-        </form>
-      )} */}
-
+              {isLoggedIn ? (
+                <p>Welcome {email}!</p>
+              ) : (
                 <form onSubmit={handleLogin}>
                   <div className={css["login-text"]}>
                     <label htmlFor="Email" className={css["login-name"]}>
@@ -167,9 +160,12 @@ useEffect(()=>{
                     </Link></span>
                   </div>
                 </form>
+              )}
+
+
               {/* )} */}
             </div>
-            <div className="mx-auto">
+            {/* <div className="mx-auto">
               <FacebookLogin
                 appId="3195280460764608"
                 autoLoad={false}
@@ -179,7 +175,7 @@ useEffect(()=>{
                 icon="fa-facebook"
                 size="metro"
               />
-            </div>
+            </div> */}
           </div>
         </div>
 

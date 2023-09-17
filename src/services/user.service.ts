@@ -1,7 +1,6 @@
 import { TParamsRegister } from "src/pages/register";
 import { axiosWithAuth, axiosWithoutAuth } from "./config.service";
-import { getLocalStorage } from "src/utils";
-import { ACCESS_TOKEN } from "src/constants";
+
 
 export const userLogin = async (data: { email: string; password: string }) => {
   try {

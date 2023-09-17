@@ -1,5 +1,5 @@
 import { getLocalStorage, removeLocalStorage } from "src/utils";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import css from "./header.module.scss";
 
 import { IconCart, IconSearch } from "src/assets/icons";
@@ -13,7 +13,7 @@ import { clearUser } from "src/redux/slices/userReducerLogin";
 import { Search } from "src/templates/search";
 
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);// Trạng thái đăng nhập
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const cartItems = useSelector(
     (state: RootState) => state.cartReducer.cartItems,
@@ -21,7 +21,7 @@ function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Đếm số sản phẩm trong giỏ hàng
+ 
   const cartItemCount = cartItems.reduce(
     (total, item) => total + item.quantity,
     0,
@@ -30,16 +30,17 @@ function Header() {
     setIsModalOpen(true);
   };
 
-  // Hàm đóng modal
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  
+
 
   useEffect(() => {
     const accessToken = getLocalStorage(ACCESS_TOKEN);
     const storedIsLoggedIn = getLocalStorage('isLoggedIn')
     setIsLoggedIn(!!accessToken || storedIsLoggedIn)
+    
   }, []);
 
   const handleLogout = () => {
@@ -66,11 +67,11 @@ function Header() {
       setEmail(getLocalStorage('email') || '')
     }, [])
 
-    const { userLogin } = useSelector(
-      (state: RootState) => state.userReducerLogin,
-    );
+    // const { userLogin } = useSelector(
+    //   (state: RootState) => state.userReducerLogin,
+    // );
 
-    if (email !== '') {
+    if (isLoggedIn) {
       return (
         <div className={css["header-left-author"]}>
           <Link to="/profile">{email}</Link>

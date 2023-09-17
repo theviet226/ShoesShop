@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import {Card, TCard} from '../card'
 import css from './list-card.module.scss'
 type Props ={
