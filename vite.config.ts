@@ -14,5 +14,7 @@ export default defineConfig({
       fonts: "/src/assets/fonts",
       src: "/src"
     },
+    
   },
+  base: "./",
 });

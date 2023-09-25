@@ -34,7 +34,7 @@ const HomeCarousel: React.FC = () => {
       <Carousel
         ref={refCarousel}
         autoplay
-        
+
         className={css["carousel-main"]}
       >
         <div className={css["inf-home"]}>
