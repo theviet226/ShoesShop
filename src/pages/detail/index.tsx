@@ -22,7 +22,7 @@ function Detail() {
   const isUserLoggedIn = !!getLocalStorage(ACCESS_TOKEN);
   const [quantity, setQuantity] = useState(1);
   const handleAddToCart = () => {
-    if (isUserLoggedIn) { // Kiểm tra nếu ACCESS_TOKEN tồn tại
+    if (isUserLoggedIn) { // Kiểm tra nếu ACCESS_TOKEN tồn tạii
       const productToAdd = {
         productId: productItem?.id,
         name: productItem?.name,
