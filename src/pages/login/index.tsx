@@ -28,7 +28,6 @@ function Login() {
       setEmail(storedEmail)
     }
   }, [])
-  // Kiểm tra AccessToken từ Local Storage khi component được tạo
   useEffect(() => {
     const accessToken = getLocalStorage(ACCESS_TOKEN);
     if (accessToken) {
