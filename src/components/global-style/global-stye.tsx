@@ -10,5 +10,5 @@ export function GlobalStyle(props: Props) {
     const {children} = props;
   return (
     <Fragment>{children}</Fragment>
-  )
+  )     
 }

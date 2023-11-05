@@ -2,6 +2,7 @@ import { TParamsRegister } from "src/pages/register";
 import { axiosWithAuth, axiosWithoutAuth } from "./config.service";
 import { getLocalStorage } from "src/utils";
 import { ACCESS_TOKEN } from "src/constants";
+import { TProfile } from "src/pages/profile";
 
 export const userLogin = async (data: { email: string; password: string }) => {
   try {
@@ -48,4 +49,13 @@ export const getUserProfile = async () =>{
   })
   
   return resp.data
+}
+export const getUpdateProfile = async (data:TProfile) =>{
+    const resp = await axiosWithAuth({
+      url:"/Users/updateProfile",
+      method:"post",
+      data
+    })
+    return resp.data
+  
 }

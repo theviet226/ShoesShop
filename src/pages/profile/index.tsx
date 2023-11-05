@@ -3,48 +3,94 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "src/redux/config-store";
-import { setProfile, userProfile } from "src/redux/slices/userReducerLogin";
-import { getUserProfile } from "src/services/user.service";
+import {
+  setOrderHistory,
+  setProfile,
+  userProfile,
+} from "src/redux/slices/userReducerLogin";
+import { getUpdateProfile, getUserProfile } from "src/services/user.service";
 
+export type TProfile = {
+  email: string;
+  password: string;
+  name: string;
+  gender: boolean;
+  phone: string;
+};
 function Profile() {
+  const [update,setUpdate] = useState({
+    email: "",
+  password: "",
+  name: "",
+  gender: true,
+  phone: "",
+  })
   const { userProfile } = useSelector(
-    (state: RootState) => state.userReducerLogin
+    (state: RootState) => state.userReducerLogin,
   );
-
+  const { userOderHistory } = useSelector(
+    (state: RootState) => state.userReducerLogin,
+  );
+  const { userOrderDetail } = useSelector(
+    (state: RootState) => state.userReducerLogin,
+  );
+  const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
-  const userFormProfile = useFormik({
-    initialValues: {
-      email: userProfile?.email || "",
-      name: userProfile?.name || "",
-      phone: userProfile?.phone || "",
-      password: userProfile?.password || "",
-      avatar: userProfile?.avatar || "",
-    },
-    onSubmit: (values: any) => {
-      // Xử lý khi người dùng gửi biểu mẫu
-    },
-  });
-
+  // const userFormProfile = useFormik({
+  //   initialValues: {
+  //     email: userProfile?.email || "",
+  //     name: userProfile?.name || "",
+  //     phone: userProfile?.phone || "",
+  //     password: userProfile?.password || "",
+  //     avatar: userProfile?.avatar || "",
+  //   },
+  //   onSubmit: (values: any) => {
+      
+  //   },
+  // });
 
   useEffect(() => {
     getUserProfile()
       .then((resp) => {
-        const infoUser = resp.content
+        const infoUser = resp.content;
+        const orderHistory = resp.ordersHistory;
+        const orderDetail = resp.OrderDetail;
+
         if (resp) {
           dispatch(setProfile(infoUser));
+          dispatch(setOrderHistory(orderHistory));
+          dispatch(orderDetail(orderDetail));
           console.log(resp);
-          userFormProfile.setValues({
-            email: infoUser.email || "",
-            name: infoUser.name || "",
-            phone: infoUser.phone || "",
-            password: infoUser.password || "",
-            avatar: infoUser.avatar || "",
-          });
+          // userFormProfile.setValues({
+          //   email: infoUser.email || "",
+          //   name: infoUser.name || "",
+          //   phone: infoUser.phone || "",
+          //   password: infoUser.password || "",
+          //   avatar: infoUser.avatar || "",
+          // });
+
+          if (userOrderDetail) {
+            const { quantity, price } = userOrderDetail;
+            if (quantity !== undefined && price !== undefined) {
+              setTotal(quantity * price);
+            } else {
+              setTotal(0);
+            }
+          } else {
+            setTotal(0);
+          }
         }
       })
       .catch((e) => console.log(e));
   }, []);
-
+const hanldeChange = (event: React.MouseEvent<HTMLElement>) =>{
+  getUpdateProfile(update).then((resp) =>{
+    const updateUser = resp.content
+    setUpdate(updateUser)
+  }).catch((error)=>{
+    console.log(error)
+  })
+}
   return (
     <div style={{ paddingTop: "30px" }}>
       <h3
@@ -69,12 +115,12 @@ function Profile() {
             <div className="col-4 text-center">
               <img
                 src={userProfile?.avatar}
-                onChange={userFormProfile.handleChange}
-                onBlur={userFormProfile.handleBlur}
+                // onChange={userFormProfile.handleChange}
+                // onBlur={userFormProfile.handleBlur}
                 className=" rounded-circle"
                 width={200}
                 height={200}
-              // {...userFormProfile.getFieldProps('avtar')}
+                // {...userFormProfile.getFieldProps('avtar')}
               />
             </div>
             <div className="col-8">
@@ -95,7 +141,6 @@ function Profile() {
                       <input
                         className="form-control"
                         type="email"
-
                         style={{
                           height: "54px",
                           fontSize: "16px",
@@ -104,10 +149,10 @@ function Profile() {
                           color: "#000000DE",
                           background: "#21212114",
                         }}
-                        value={userFormProfile?.values.email}
-                      // onChange={userFormProfile.handleChange}
-                      // onBlur={userFormProfile.handleBlur}
-                      // {...userFormProfile.getFieldProps('email')}
+                        value={userProfile?.email}
+                        // onChange={userFormProfile.handleChange}
+                        // onBlur={userFormProfile.handleBlur}
+                        // {...userFormProfile.getFieldProps('email')}
                       />
                     </div>
                     <div className="form-group">
@@ -133,11 +178,57 @@ function Profile() {
                           color: "#000000DE",
                           background: "#21212114",
                         }}
-                        // value={userProfile?.phone}
+                        value={userProfile?.phone}
                         // onChange={userFormProfile.handleChange}
                         // onBlur={userFormProfile.handleBlur}
-                        {...userFormProfile.getFieldProps('phone')}
                       />
+                    </div>
+                    <div className="form-group">
+                      <p
+                        style={{
+                          fontFamily: "Roboto",
+                          fontSize: "18px",
+                          fontWeight: "500",
+                          color: "#00000099",
+                        }}
+                      >
+                        Gender
+                      </p>
+                      <div>
+                        <ul className="row justify-content-around">
+                          <li className="col-4" >
+                            <input
+                              type="radio"
+                              style={{
+                                width:"25px",
+                                height:"25px"
+                              }}
+                            />
+                            <label htmlFor="male" style={{
+                              position:"relative",
+                              top:"20px",
+                              right:"27px"
+                            }}>Male</label>
+                          </li>
+                          <li className="col-4">
+                            <input
+                              type="radio"
+                              // name="selector"
+                              // id="femail"
+                              style={{
+                                width:"25px",
+                                height:"25px"
+                              }}
+                            />
+                            <label htmlFor="femail"style={{
+                              position:"relative",
+                              top:"20px",
+                              right:"35px"
+                            }}
+                            >Female</label>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                   <div className="col-6">
@@ -164,10 +255,9 @@ function Profile() {
                           color: "#000000DE",
                           background: "#21212114",
                         }}
-                        // value={userProfile?.name}
+                        value={userProfile?.name}
                         // onChange={userFormProfile.handleChange}
                         // onBlur={userFormProfile.handleBlur}
-                        {...userFormProfile.getFieldProps('name')}
                       />
                     </div>
                     <div className="form-group">
@@ -193,19 +283,20 @@ function Profile() {
                           color: "#000000DE",
                           background: "#21212114",
                         }}
-
                         // value={
                         //   userProfile?.password ? userProfile?.password : "123"
                         // }
                         // onChange={userFormProfile.handleChange}
                         // onBlur={userFormProfile.handleBlur}
-                        {...userFormProfile.getFieldProps('password')}
+                        value={
+                          userProfile?.password ? userProfile?.password : ""
+                        }
                       />
                     </div>
                     <div className="form-group d-flex ">
                       <div className="text-right w-25 mt-5">
                         <button
-                          type="submit"
+                          
                           className="btn"
                           style={{
                             background: "#6200EE",
@@ -216,7 +307,9 @@ function Profile() {
                             borderRadius: "50px",
                             fontWeight: "500",
                             fontFamily: "Roboto",
+                            
                           }}
+                          onClick={hanldeChange}
                         >
                           Update
                         </button>
@@ -293,7 +386,9 @@ function Profile() {
               color: "#cb0dc3",
             }}
           >
-            + Orders have been placed on 09 - 19 - 2020
+            + Orders have been placed on {userOderHistory?.date?.getDate()}.
+            {userOderHistory?.date?.getMonth()}.
+            {userOderHistory?.date?.getFullYear()}
           </p>
           <div className="table">
             <table className="table" style={{ border: "transparent" }}>
@@ -318,7 +413,7 @@ function Profile() {
                 <td>1</td>
                 <td>
                   <img
-                    src="https://i.pravatar.cc"
+                    src={userOrderDetail?.image}
                     style={{
                       width: "75px",
                       height: "75px",
@@ -326,10 +421,10 @@ function Profile() {
                     alt=""
                   />
                 </td>
-                <td>Product 1</td>
-                <td>1000</td>
-                <td>1</td>
-                <td>1000</td>
+                <td>{userOrderDetail?.name}</td>
+                <td>{userOrderDetail?.price}$</td>
+                <td>{userOrderDetail?.quantity}</td>
+                <td>{total} </td>
               </tr>
             </table>
           </div>

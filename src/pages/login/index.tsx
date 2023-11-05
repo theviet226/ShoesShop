@@ -72,20 +72,7 @@ useEffect(()=>{
   };
 
 
-  const [loginFacebook, setLoginFacebook] = useState({
-    facebookToken: "",
-  });
-  const responseFacebook = (resp: any) => {
-    loginFacebookUser(loginFacebook)
-      .then((resp) => {
-        setLocalStorage(ACCESS_TOKEN, resp.content.accessToken);
-        setIsLoggedIn(true);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+ 
 
   return (
     <>
@@ -168,17 +155,6 @@ useEffect(()=>{
                   </div>
                 </form>
               {/* )} */}
-            </div>
-            <div className="mx-auto">
-              <FacebookLogin
-                appId="3195280460764608"
-                autoLoad={false}
-                fields="name,email,picture"
-                callback={responseFacebook}
-                cssClass="btn btn-primary btn-lg"
-                icon="fa-facebook"
-                size="metro"
-              />
             </div>
           </div>
         </div>

@@ -23,16 +23,3 @@ export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
-export const settings = {
-  getStorageJson :(name:string):any|undefined =>{
-    if (localStorage.getItem(name)){
-      const dataStore:string | undefined |null =localStorage.getItem(name)
-      if (typeof dataStore == 'string'){
-        const data = JSON.parse(dataStore)
-        return data
-      }
-      return undefined
-    }
-    return
-  }
- }
